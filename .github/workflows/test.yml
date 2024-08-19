@@ -81,6 +81,8 @@ jobs:
           terraform_version: ${{ matrix.terraform }}
           terraform_wrapper: false
       - run: go mod download
+      - name: "Set up environment"
+        run: docker compose -f docker_compose/docker-compose.yml up -d --wait
       - env:
           TF_ACC: "1"
         run: go test -v -cover ./internal/provider/
