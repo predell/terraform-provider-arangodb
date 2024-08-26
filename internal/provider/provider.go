@@ -21,32 +21,32 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-// Ensure ArangoProvider satisfies various provider interfaces.
-var _ provider.Provider = &ArangoProvider{}
-var _ provider.ProviderWithFunctions = &ArangoProvider{}
+// Ensure ArangodbProvider satisfies various provider interfaces.
+var _ provider.Provider = &ArangodbProvider{}
+var _ provider.ProviderWithFunctions = &ArangodbProvider{}
 
-// ArangoProvider defines the provider implementation.
-type ArangoProvider struct {
+// ArangodbProvider defines the provider implementation.
+type ArangodbProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// ArangoProviderModel describes the provider data model.
-type ArangoProviderModel struct {
+// ArangodbProviderModel describes the provider data model.
+type ArangodbProviderModel struct {
 	Endpoint types.String `tfsdk:"endpoint"`
 	Password types.String `tfsdk:"password"`
 	Tls      types.Bool   `tfsdk:"tls"`
 	Username types.String `tfsdk:"username"`
 }
 
-func (p *ArangoProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+func (p *ArangodbProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = "arangodb"
 	resp.Version = p.version
 }
 
-func (p *ArangoProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *ArangodbProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.StringAttribute{
@@ -69,8 +69,8 @@ func (p *ArangoProvider) Schema(ctx context.Context, req provider.SchemaRequest,
 	}
 }
 
-func (p *ArangoProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-	var data ArangoProviderModel
+func (p *ArangodbProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	var data ArangodbProviderModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -91,7 +91,7 @@ func (p *ArangoProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	resp.ResourceData = &client
 }
 
-func (p *ArangoProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (p *ArangodbProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewDatabaseResource,
 		NewUserPermissionResource,
@@ -99,17 +99,17 @@ func (p *ArangoProvider) Resources(ctx context.Context) []func() resource.Resour
 	}
 }
 
-func (p *ArangoProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+func (p *ArangodbProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{}
 }
 
-func (p *ArangoProvider) Functions(ctx context.Context) []func() function.Function {
+func (p *ArangodbProvider) Functions(ctx context.Context) []func() function.Function {
 	return []func() function.Function{}
 }
 
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
-		return &ArangoProvider{
+		return &ArangodbProvider{
 			version: version,
 		}
 	}
