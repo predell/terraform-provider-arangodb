@@ -13,8 +13,10 @@ description: |-
 ## Example Usage
 
 ```terraform
-provider "scaffolding" {
-  # example configuration here
+provider "arangodb" {
+  endpoint = "https://localhost:8529"
+  username = "username"
+  password = "password"
 }
 ```
 
