@@ -100,24 +100,31 @@ func (r *UserPermissionResource) Create(ctx context.Context, req resource.Create
 
 	user, errGetUser := r.client.User(ctx, data.User.ValueString())
 	if errGetUser != nil {
-		resp.Diagnostics.AddError(
-			"Unable to find existing User",
-			"An unexpected error occurred while attempting to create the resource. "+
-				"Please retry the operation or report this issue to the provider developers.\n\n"+
-				"HTTP Error: "+errGetUser.Error(),
-		)
-
+		if shared.IsNotFound(errGetUser) {
+			resp.State.RemoveResource(ctx)
+		} else {
+			resp.Diagnostics.AddError(
+				"Unable to find existing User",
+				"An unexpected error occurred while attempting to create the resource. "+
+					"Please retry the operation or report this issue to the provider developers.\n\n"+
+					"HTTP Error: "+errGetUser.Error(),
+			)
+		}
 		return
 	}
 
 	err := user.SetDatabaseAccess(ctx, data.Database.ValueString(), arangodb.Grant(data.Permission.ValueString()))
 	if err != nil {
-		resp.Diagnostics.AddError(
-			"Unable to Create Resource",
-			"An unexpected error occurred while attempting to create the resource. "+
-				"Please retry the operation or report this issue to the provider developers.\n\n"+
-				"HTTP Error: "+err.Error(),
-		)
+		if shared.IsNotFound(errGetUser) {
+			resp.State.RemoveResource(ctx)
+		} else {
+			resp.Diagnostics.AddError(
+				"Unable to Create Resource",
+				"An unexpected error occurred while attempting to create the resource. "+
+					"Please retry the operation or report this issue to the provider developers.\n\n"+
+					"HTTP Error: "+err.Error(),
+			)
+		}
 
 		return
 	}
