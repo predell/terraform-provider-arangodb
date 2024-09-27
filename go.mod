@@ -3,7 +3,7 @@ module terraform-provider-arangodb
 go 1.21
 
 require (
-	github.com/arangodb/go-driver/v2 v2.1.0
+	github.com/arangodb/go-driver/v2 v2.1.1
 	github.com/hashicorp/terraform-plugin-docs v0.19.4
 	github.com/hashicorp/terraform-plugin-framework v1.11.0
 	github.com/hashicorp/terraform-plugin-go v0.23.0
