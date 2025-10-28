@@ -2,6 +2,6 @@ services:
   arangodb:
     environment:
       ARANGO_ROOT_PASSWORD: "password"
-    image: "arangodb:3.12.1"
+    image: "arangodb:3.12.6"
     ports:
       - "8529:8529"
